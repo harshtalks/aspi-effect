@@ -1,5 +1,4 @@
 // All the branded types here
-
 import { Schema } from "@effect/schema";
 
 // AccountId identifier with branded type
