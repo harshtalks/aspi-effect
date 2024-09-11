@@ -51,7 +51,11 @@ export const policy = <TEntity extends string, TAction extends string, E, R>(
   entity: TEntity,
   action: TAction,
   handler: (actor: User) => Effect.Effect<boolean, E, R>,
-) => {
+): Effect.Effect<
+  AuthorizedActor<TEntity, TAction>,
+  E | Unauthorized,
+  R | CurrentUser
+> => {
   return Effect.andThen(CurrentUser, (actor) => {
     return Effect.andThen(handler(actor), (isAuthorized) => {
       return isAuthorized
