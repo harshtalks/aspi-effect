@@ -13,16 +13,11 @@ export class Uuid extends Context.Tag("UUID")<
   Effect.Effect.Success<typeof makeUuidService>
 >() {}
 
-export const UuidLive = Layer.succeed(
-  Uuid,
-  Uuid.of(makeUuidService.pipe(Effect.runSync)),
-);
+export const UuidLive = Layer.effect(Uuid, makeUuidService);
 
-export const UuidTest = Layer.succeed(
+export const UuidTest = Layer.effect(
   Uuid,
-  Uuid.of({
-    generate: Effect.succeed("test-uuid"),
-  }),
+  Effect.succeed({ generate: Effect.succeed("12") }),
 );
 
 /**Notes */

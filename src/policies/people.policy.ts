@@ -25,11 +25,7 @@ export class PeoplePolicy extends Context.Tag("peoplePolicy")<
   MakeService<typeof makePeoplePolicy>
 >() {}
 
-export const peoplePolicyLive = Layer.succeed(
+export const peoplePolicyLive = Layer.effect(
   PeoplePolicy,
-  PeoplePolicy.of(
-    makePeoplePolicy
-      .pipe(Effect.provide(groupsPolicyLive))
-      .pipe(Effect.runSync),
-  ),
-);
+  makePeoplePolicy,
+).pipe(Layer.provide(groupsPolicyLive));

@@ -15,9 +15,6 @@ export class GroupsRepo extends Context.Tag(
   ContextTags.groups.pipe(Effect.runSync),
 )<GroupsRepo, MakeService<typeof makeGroupsRepo>>() {}
 
-export const groupsRepoLive = Layer.succeed(
-  GroupsRepo,
-  GroupsRepo.of(
-    makeGroupsRepo.pipe(Effect.provide(sqlLive)).pipe(Effect.runSync),
-  ),
+export const groupsRepoLive = Layer.effect(GroupsRepo, makeGroupsRepo).pipe(
+  Layer.provide(sqlLive),
 );

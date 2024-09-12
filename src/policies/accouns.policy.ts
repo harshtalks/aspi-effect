@@ -27,7 +27,7 @@ export class AccountsPolicy extends Context.Tag("accountsPolicy")<
   MakeService<typeof makeAccountsPolicy>
 >() {}
 
-export const accountsPolicyLive = Layer.succeed(
+export const accountsPolicyLive = Layer.effect(
   AccountsPolicy,
-  AccountsPolicy.of(makeAccountsPolicy.pipe(Effect.runSync)),
+  makeAccountsPolicy,
 );

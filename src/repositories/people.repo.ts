@@ -15,9 +15,6 @@ export class PeopleRepo extends Context.Tag("People/Repo")<
   MakeService<typeof makePeopleRepo>
 >() {}
 
-export const peopleRepoLive = Layer.succeed(
-  PeopleRepo,
-  PeopleRepo.of(
-    makePeopleRepo.pipe(Effect.provide(sqlLive)).pipe(Effect.runSync),
-  ),
+export const peopleRepoLive = Layer.effect(PeopleRepo, makePeopleRepo).pipe(
+  Layer.provide(sqlLive),
 );

@@ -37,9 +37,6 @@ export class People extends Context.Tag("@impl/people")<
   MakeService<typeof makePeopleImpl>
 >() {}
 
-export const peopleLive = Layer.succeed(
-  People,
-  People.of(
-    makePeopleImpl.pipe(Effect.provide(peopleRepoLive)).pipe(Effect.runSync),
-  ),
+export const peopleLive = Layer.effect(People, makePeopleImpl).pipe(
+  Layer.provide(peopleRepoLive),
 );

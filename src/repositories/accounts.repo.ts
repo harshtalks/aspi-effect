@@ -17,9 +17,7 @@ export class AccountsRepo extends Context.Tag(
   ContextTags.accounts.pipe(Effect.runSync),
 )<AccountsRepo, MakeService<typeof makeAccountRepoService>>() {}
 
-export const accountsRepoLive = Layer.succeed(
+export const accountsRepoLive = Layer.effect(
   AccountsRepo,
-  AccountsRepo.of(
-    makeAccountRepoService.pipe(Effect.provide(sqlLive)).pipe(Effect.runSync),
-  ),
-);
+  makeAccountRepoService,
+).pipe(Layer.provide(sqlLive));

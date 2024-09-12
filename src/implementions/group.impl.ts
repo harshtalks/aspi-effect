@@ -85,11 +85,7 @@ export class Groups extends Context.Tag("@impl/groups")<
   MakeService<typeof makeGroupsImpl>
 >() {}
 
-export const groupsLive = Layer.succeed(
-  Groups,
-  Groups.of(
-    makeGroupsImpl
-      .pipe(Effect.provide(sqlLive), Effect.provide(groupsRepoLive))
-      .pipe(Effect.runSync),
-  ),
+export const groupsLive = Layer.effect(Groups, makeGroupsImpl).pipe(
+  Layer.provide(sqlLive),
+  Layer.provide(groupsRepoLive),
 );
