@@ -7,7 +7,7 @@ import { Unauthorized } from "../domains/policy";
 import { security } from "../annonations/security";
 
 // People API
-export class PeopleApi extends HttpApiGroup.make("peopleApi").pipe(
+export class PeopleApi extends HttpApiGroup.make("people").pipe(
   HttpApiGroup.add(
     HttpApiEndpoint.post("createPeople", "/groups/:groupId/people").pipe(
       HttpApiEndpoint.setPath(

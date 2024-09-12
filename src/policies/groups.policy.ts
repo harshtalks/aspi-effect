@@ -4,6 +4,7 @@ import { Context, Effect, Layer } from "effect";
 import { Group } from "../domains/group";
 import { policy } from "../domains/policy";
 import { MakeService } from "../utilities/with-effect";
+import { UserId } from "../domains/user";
 
 const makeGroupsPolicyService = Effect.sync(() => {
   const canCreate = (_group: typeof Group.jsonCreate.Type) =>
@@ -14,7 +15,12 @@ const makeGroupsPolicyService = Effect.sync(() => {
       Effect.succeed(group.ownerId === actor.accountId),
     );
 
-  return { canCreate, canUpdate } as const;
+  const canRead = (group: Group) =>
+    policy("Group", "read", (actor) =>
+      Effect.succeed(group.ownerId === actor.accountId),
+    );
+
+  return { canCreate, canUpdate, canRead } as const;
 });
 
 export class GroupsPolicy extends Context.Tag("groupsPolicy")<

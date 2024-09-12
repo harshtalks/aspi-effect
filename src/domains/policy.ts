@@ -56,11 +56,15 @@ export const policy = <TEntity extends string, TAction extends string, E, R>(
   E | Unauthorized,
   R | CurrentUser
 > => {
+  // add current user as dep
   return Effect.andThen(CurrentUser, (actor) => {
+    // follow upon the dep, check if the handler returns as true
     return Effect.andThen(handler(actor), (isAuthorized) => {
       return isAuthorized
-        ? Effect.succeed(authorizeUser(actor))
-        : Effect.fail(
+        ? // if yes, make user authorized
+          Effect.succeed(authorizeUser(actor))
+        : // else fail with unauhtorized error
+          Effect.fail(
             new Unauthorized({
               action: action,
               entity: entity,
@@ -86,7 +90,7 @@ export const policyCompose = <TActor extends AuthorizedActor, E, R>(
 // we have a policy -> generated from the "policy function above"
 // then we have a effect which we want to run when the policy is satisfied
 // we are zipping the policy with the effect, so that the effect is only run when the policy is satisfied.
-// we need to reove the TActor as a requirement since the returning effect is not dependent on the TActor
+// we need to remove the TActor as a requirement since the returning effect is not dependent on the TActor
 export const policyUse = <TActor extends AuthorizedActor, E, R>(
   policy: Effect.Effect<TActor, E, R>,
 ) => {
@@ -97,6 +101,7 @@ export const policyUse = <TActor extends AuthorizedActor, E, R>(
   };
 };
 
+// it adds the Authorized user as a dependency to our api handlers. that means we need to satisfy those injections.
 export const policyRequire = <TEntity extends string, TAction extends string>(
   _entity: TEntity,
   _action: TAction,
