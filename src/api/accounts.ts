@@ -9,7 +9,7 @@ import { Schema } from "@effect/schema";
 import { security } from "../annonations/security";
 import { Unauthorized } from "../domains/policy";
 
-export class AccountsApi extends HttpApiGroup.make("Accounts").pipe(
+export class AccountsApi extends HttpApiGroup.make("accounts").pipe(
   // GET /users/me
   HttpApiGroup.add(
     HttpApiEndpoint.get("me", "/users/me").pipe(

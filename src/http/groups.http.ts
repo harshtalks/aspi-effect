@@ -34,6 +34,7 @@ export const httpGroupsLive = HttpApiBuilder.group(Api, "groups", (handlers) =>
             return Effect.succeed(group).pipe(policyUse(policy.canRead(group)));
           });
         }),
+        accounts.httpSecurity,
       );
     }),
   ),

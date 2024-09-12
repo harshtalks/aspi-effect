@@ -92,7 +92,7 @@ const makeAccountsImpl = Effect.all([
             user,
           },
         }),
-        policyRequire("User", "ipdate"),
+        policyRequire("User", "update"),
       );
 
     const findUserByAccessToken = (apiKey: AccessToken) =>
@@ -167,16 +167,9 @@ export class Accounts extends Context.Tag("@impl/accounts")<
   MakeService<typeof makeAccountsImpl>
 >() {}
 
-export const accountsLive = Layer.succeed(
-  Accounts,
-  Accounts.of(
-    makeAccountsImpl
-      .pipe(
-        Effect.provide(sqlLive),
-        Effect.provide(accountsRepoLive),
-        Effect.provide(usersRepoLive),
-        Effect.provide(UuidLive),
-      )
-      .pipe(Effect.runSync),
-  ),
+export const accountsLive = Layer.effect(Accounts, makeAccountsImpl).pipe(
+  Layer.provide(sqlLive),
+  Layer.provide(accountsRepoLive),
+  Layer.provide(usersRepoLive),
+  Layer.provide(UuidLive),
 );

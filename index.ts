@@ -1,2 +1,6 @@
-// demo app to learn how effect works
-// we will make http service call to get data from server
+import { Layer } from "effect";
+import { httpLive } from "./src/index";
+import { telemetryLive } from "./src/requirements/telemetry";
+import { NodeRuntime } from "@effect/platform-node";
+
+httpLive.pipe(Layer.provide(telemetryLive), Layer.launch, NodeRuntime.runMain);
